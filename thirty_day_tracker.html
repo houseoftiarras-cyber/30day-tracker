@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 Day Foundation Challenge — The Simple Complex</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0e0e0e;
+    color: #f0ece8;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+  }
+
+  .brand {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: #D4536B;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    color: #f0ece8;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* ── OPT-IN GATE ── */
+  .gate {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 28px 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .gate-icon {
+    font-size: 32px;
+    margin-bottom: 14px;
+  }
+
+  .gate-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f0ece8;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .gate-desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .gate-desc strong {
+    color: #ccc;
+  }
+
+  .email-input {
+    width: 100%;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #f0ece8;
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-family: inherit;
+    -webkit-appearance: none;
+    text-align: center;
+  }
+
+  .email-input:focus {
+    outline: none;
+    border-color: #D4536B;
+  }
+
+  .email-input::placeholder {
+    color: #444;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: #D4536B;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.15s;
+  }
+
+  .submit-btn:active { opacity: 0.85; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .gate-error {
+    font-size: 13px;
+    color: #D4536B;
+    margin-top: 8px;
+    min-height: 18px;
+  }
+
+  .gate-privacy {
+    font-size: 11px;
+    color: #444;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  /* ── TRACKER (hidden until unlocked) ── */
+  .tracker-content { display: none; }
+  .tracker-content.unlocked { display: block; }
+
+  .unlock-banner {
+    background: #1a3d2b;
+    border: 1px solid #1D9E75;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .unlock-banner-text {
+    font-size: 14px;
+    color: #1D9E75;
+    font-weight: 600;
+  }
+
+  .unlock-banner-sub {
+    font-size: 12px;
+    color: #1a7a58;
+    margin-top: 2px;
+  }
+
+  /* ── PHASE CARDS ── */
+  .phase-card {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .phase-pill {
+    background: #D4536B;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  .phase-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f0ece8;
+  }
+
+  .phase-days {
+    font-size: 12px;
+    color: #666;
+    margin-top: 3px;
+  }
+
+  .phase-desc {
+    font-size: 13px;
+    color: #999;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .habit-input-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .habit-input {
+    width: 100%;
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #f0ece8;
+    font-size: 15px;
+    margin-bottom: 10px;
+    font-family: inherit;
+    -webkit-appearance: none;
+  }
+
+  .habit-input:focus {
+    outline: none;
+    border-color: #D4536B;
+  }
+
+  .habit-input::placeholder { color: #444; }
+
+  .tracker-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 600;
+    margin: 16px 0 10px;
+  }
+
+  .days-grid { display: grid; gap: 6px; }
+
+  .day-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  .day-label {
+    font-size: 13px;
+    color: #666;
+    width: 44px;
+    flex-shrink: 0;
+  }
+
+  .check-group {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .check-btn {
+    flex: 1;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: transparent;
+    color: #555;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .check-btn.done {
+    background: #1a3d2b;
+    border-color: #1D9E75;
+    color: #1D9E75;
+  }
+
+  .check-btn.missed {
+    background: #3d1a1e;
+    border-color: #D4536B;
+    color: #D4536B;
+  }
+
+  .insight-card {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-left: 3px solid #D4536B;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .insight-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #D4536B;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .insight-text {
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1.7;
+  }
+
+  .insight-text strong { color: #f0ece8; }
+
+  .copy-btn {
+    width: 100%;
+    background: #D4536B;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    margin-top: 8px;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1.4;
+  }
+
+  .copy-btn:active { opacity: 0.85; }
+
+  .copy-confirm {
+    text-align: center;
+    font-size: 13px;
+    color: #1D9E75;
+    margin-top: 10px;
+    min-height: 20px;
+  }
+
+  .progress-bar-wrap {
+    background: #222;
+    border-radius: 99px;
+    height: 6px;
+    margin: 12px 0 4px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 6px;
+    background: #D4536B;
+    border-radius: 99px;
+    transition: width 0.3s;
+  }
+
+  .progress-label {
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #444;
+    margin-top: 40px;
+    line-height: 1.8;
+  }
+
+  .footer a {
+    color: #D4536B;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="brand">The Simple Complex</div>
+<h1>30 Day Foundation Challenge</h1>
+<p class="subtitle">You're not changing your habits in 30 days. You're becoming the kind of woman who does what she says. That identity is the foundation everything else gets built on.</p>
+
+<!-- ── EMAIL GATE ── -->
+<div class="gate" id="gate">
+  <div class="gate-icon">🔒</div>
+  <div class="gate-title">Get free access to the full 30 day tracker</div>
+  <div class="gate-desc">Enter your email to unlock the interactive tracker, daily check-ins, and a <strong>copy-to-notes version</strong> you can save directly to your phone.</div>
+  <input class="email-input" type="email" id="email-input" placeholder="your@email.com" />
+  <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">Unlock the tracker →</button>
+  <div class="gate-error" id="gate-error"></div>
+  <div class="gate-privacy">No spam. Just content from The Simple Complex.<br>Unsubscribe any time.</div>
+</div>
+
+<!-- ── TRACKER CONTENT (locked until email submitted) ── -->
+<div class="tracker-content" id="tracker-content">
+
+  <div class="unlock-banner">
+    <div style="font-size:20px;">✓</div>
+    <div>
+      <div class="unlock-banner-text">You're in. Tracker unlocked.</div>
+      <div class="unlock-banner-sub">Check your inbox — your copy is on its way too.</div>
+    </div>
+  </div>
+
+  <!-- RULE -->
+  <div class="insight-card">
+    <div class="insight-title">The One Rule</div>
+    <div class="insight-text">
+      <strong>The habit is not the point.</strong> Waking up immediately when your alarm goes off will not change your life on its own. But becoming the woman who does what she says in the moment — consistently, even when she doesn't feel like it — changes everything. Use the habits as the tool. The identity is the goal.
+    </div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-pill">Phase 1</div>
+      <div>
+        <div class="phase-title">Build the Foundation</div>
+        <div class="phase-days">Days 1–14 · 2 habits · 14 days straight</div>
+      </div>
+    </div>
+    <div class="phase-desc">Pick two things that seem simple but you can't do consistently. Not big goals — small daily overrides. The kind of thing your brain will tell you is "too easy to matter." That thought is Akrasia. Don't listen to it.</div>
+
+    <div class="habit-input-label">Habit 1 — Your choice</div>
+    <input class="habit-input" id="h1" placeholder="e.g. get out of bed immediately when alarm goes off" />
+
+    <div class="habit-input-label">Habit 2 — Your choice</div>
+    <input class="habit-input" id="h2" placeholder="e.g. go straight inside when I get home from work" />
+
+    <div class="tracker-label">Daily Tracker — Days 1–14</div>
+    <div class="days-grid" id="grid1"></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog1" style="width:0%"></div></div>
+    <div class="progress-label" id="prog1label">0 / 14 days</div>
+  </div>
+
+  <!-- BEHAVIORAL CONDITIONING INSIGHT -->
+  <div class="insight-card">
+    <div class="insight-title">Why Phase 1 Works</div>
+    <div class="insight-text">
+      This is <strong>behavioral conditioning</strong>. Every time you close the gap between "I should" and "I did," you reinforce a neural pathway — training your brain to associate intention with action instead of intention with negotiation. You're not building the habit. You're building the <strong>identity of someone who keeps her word to herself.</strong>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-pill">Phase 2</div>
+      <div>
+        <div class="phase-title">Add Weight</div>
+        <div class="phase-days">Days 15–21 · 3 habits · Keep Phase 1 going</div>
+      </div>
+    </div>
+    <div class="phase-desc">You have 14 days of evidence now. Add one more thing — slightly harder than the first two. Something that requires a bit more override. Keep doing your Phase 1 habits.</div>
+
+    <div class="habit-input-label">New Habit — Slightly harder</div>
+    <input class="habit-input" id="h3" placeholder="e.g. work on my goal for 20 min every day" />
+
+    <div class="tracker-label">Daily Tracker — Days 15–21</div>
+    <div class="days-grid" id="grid2"></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog2" style="width:0%"></div></div>
+    <div class="progress-label" id="prog2label">0 / 7 days</div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-pill">Phase 3</div>
+      <div>
+        <div class="phase-title">Raise the Standard</div>
+        <div class="phase-days">Days 22–30 · 4 habits · Keep everything going</div>
+      </div>
+    </div>
+    <div class="phase-desc">Three weeks of consistent override behind you. Add one final thing — something that would have felt overwhelming on day one but feels within reach now. That gap is the muscle growing.</div>
+
+    <div class="habit-input-label">Final Habit — A real stretch</div>
+    <input class="habit-input" id="h4" placeholder="e.g. gym 3x this week no matter what" />
+
+    <div class="tracker-label">Daily Tracker — Days 22–30</div>
+    <div class="days-grid" id="grid3"></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog3" style="width:0%"></div></div>
+    <div class="progress-label" id="prog3label">0 / 9 days</div>
+  </div>
+
+  <!-- COMPOUNDING -->
+  <div class="insight-card">
+    <div class="insight-title">What Happens Next</div>
+    <div class="insight-text">
+      Repeat this framework every month. <strong>Add slightly harder things each cycle.</strong> Month 1 you build the foundation. Month 3 you're doing things month-1-you couldn't have started. The growth compounds — like building muscle. By month six the distance between who you were and who you are is almost unrecognizable.
+    </div>
+  </div>
+
+  <!-- COPY TO NOTES -->
+  <button class="copy-btn" onclick="copyToNotes()">
+    Copy & paste the full framework to your notes →
+  </button>
+  <div class="copy-confirm" id="copy-confirm"></div>
+
+</div>
+
+<div class="footer">
+  The Simple Complex · ChamiaTiarra<br>
+  <a href="https://www.youtube.com/@ChamiaTiarra" target="_blank">youtube.com/@ChamiaTiarra</a>
+</div>
+
+<script>
+  /*
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BEEHIIV SETUP — ADD YOUR CREDENTIALS
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. Go to Beehiiv dashboard
+  2. Settings → API → Create API key (copy it)
+  3. Settings → Publication → copy your Publication ID (looks like pub_xxxxxxxx)
+  4. Replace the two placeholders below
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  */
+  const BEEHIIV_API_KEY = 'YOUR_BEEHIIV_API_KEY_HERE';
+  const BEEHIIV_PUB_ID = 'YOUR_PUBLICATION_ID_HERE'; // e.g. pub_abc12345
+
+  // Check if already unlocked from a previous visit
+  if (localStorage.getItem('tsc_unlocked') === 'true') {
+    unlockTracker(false);
+  }
+
+  async function handleSubmit() {
+    const emailEl = document.getElementById('email-input');
+    const errorEl = document.getElementById('gate-error');
+    const btn = document.getElementById('submit-btn');
+    const email = emailEl.value.trim();
+
+    errorEl.textContent = '';
+
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      errorEl.textContent = 'Please enter a valid email address.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Unlocking...';
+
+    try {
+      const res = await fetch(`https://api.beehiiv.com/v2/publications/${BEEHIIV_PUB_ID}/subscriptions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${BEEHIIV_API_KEY}`
+        },
+        body: JSON.stringify({
+          email: email,
+          reactivate_existing: true,
+          send_welcome_email: true,
+          utm_source: 'youtube',
+          utm_medium: 'tracker_page',
+          utm_campaign: '30day_challenge'
+        })
+      });
+
+      if (res.ok || res.status === 201 || res.status === 200) {
+        localStorage.setItem('tsc_unlocked', 'true');
+        unlockTracker(true);
+      } else {
+        const data = await res.json();
+        errorEl.textContent = data.message || 'Something went wrong. Please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Unlock the tracker →';
+      }
+    } catch (err) {
+      // If API call fails (e.g. CORS on some hosts), still unlock — don't punish the user
+      // You can remove this fallback if you want strict gate enforcement
+      localStorage.setItem('tsc_unlocked', 'true');
+      unlockTracker(true);
+    }
+  }
+
+  function unlockTracker(animate) {
+    document.getElementById('gate').style.display = 'none';
+    const content = document.getElementById('tracker-content');
+    content.classList.add('unlocked');
+
+    if (animate) {
+      content.style.opacity = '0';
+      content.style.transform = 'translateY(12px)';
+      content.style.transition = 'opacity 0.4s, transform 0.4s';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          content.style.opacity = '1';
+          content.style.transform = 'translateY(0)';
+        });
+      });
+    }
+
+    initTracker();
+  }
+
+  function initTracker() {
+    buildGrid('grid1', 1, 14, 'prog1', 'prog1label');
+    buildGrid('grid2', 15, 7, 'prog2', 'prog2label');
+    buildGrid('grid3', 22, 9, 'prog3', 'prog3label');
+    setupInputPersist('h1');
+    setupInputPersist('h2');
+    setupInputPersist('h3');
+    setupInputPersist('h4');
+  }
+
+  function buildGrid(containerId, startDay, count, progressId, progressLabelId) {
+    const grid = document.getElementById(containerId);
+    const state = JSON.parse(localStorage.getItem(containerId) || '{}');
+    grid.innerHTML = '';
+
+    for (let i = 0; i < count; i++) {
+      const day = startDay + i;
+      const row = document.createElement('div');
+      row.className = 'day-row';
+
+      const dayLabel = document.createElement('div');
+      dayLabel.className = 'day-label';
+      dayLabel.textContent = 'Day ' + day;
+      row.appendChild(dayLabel);
+
+      const checkGroup = document.createElement('div');
+      checkGroup.className = 'check-group';
+      const dayDone = state[day];
+
+      const doneBtn = document.createElement('button');
+      doneBtn.className = 'check-btn' + (dayDone === 'done' ? ' done' : '');
+      doneBtn.textContent = dayDone === 'done' ? '✓ Done' : 'Done';
+      doneBtn.onclick = () => toggleDay(containerId, day, 'done', progressId, progressLabelId, count, startDay);
+
+      const missBtn = document.createElement('button');
+      missBtn.className = 'check-btn' + (dayDone === 'missed' ? ' missed' : '');
+      missBtn.textContent = dayDone === 'missed' ? '✗ Missed' : 'Missed';
+      missBtn.onclick = () => toggleDay(containerId, day, 'missed', progressId, progressLabelId, count, startDay);
+
+      checkGroup.appendChild(doneBtn);
+      checkGroup.appendChild(missBtn);
+      row.appendChild(checkGroup);
+      grid.appendChild(row);
+    }
+
+    updateProgress(containerId, progressId, progressLabelId, count);
+  }
+
+  function toggleDay(containerId, day, status, progressId, progressLabelId, count, startDay) {
+    const state = JSON.parse(localStorage.getItem(containerId) || '{}');
+    state[day] = state[day] === status ? undefined : status;
+    if (!state[day]) delete state[day];
+    localStorage.setItem(containerId, JSON.stringify(state));
+    buildGrid(containerId, startDay, count, progressId, progressLabelId);
+  }
+
+  function updateProgress(containerId, progressId, progressLabelId, total) {
+    const state = JSON.parse(localStorage.getItem(containerId) || '{}');
+    const done = Object.values(state).filter(v => v === 'done').length;
+    document.getElementById(progressId).style.width = Math.round((done / total) * 100) + '%';
+    document.getElementById(progressLabelId).textContent = done + ' / ' + total + ' days';
+  }
+
+  function setupInputPersist(id) {
+    const el = document.getElementById(id);
+    const saved = localStorage.getItem('habit_' + id);
+    if (saved) el.value = saved;
+    el.addEventListener('input', () => localStorage.setItem('habit_' + id, el.value));
+  }
+
+  function copyToNotes() {
+    const h1 = document.getElementById('h1').value || '[your habit 1]';
+    const h2 = document.getElementById('h2').value || '[your habit 2]';
+    const h3 = document.getElementById('h3').value || '[your habit 3]';
+    const h4 = document.getElementById('h4').value || '[your habit 4]';
+
+    const text = `30 DAY FOUNDATION CHALLENGE
+The Simple Complex — ChamiaTiarra
+
+THE RULE: The habit is not the point.
+Becoming the woman who does what she says is.
+
+━━━━━━━━━━━━━━━━━━━━
+PHASE 1 — DAYS 1–14
+Build the Foundation
+Two simple habits. 14 days straight.
+━━━━━━━━━━━━━━━━━━━━
+Habit 1: ${h1}
+Habit 2: ${h2}
+
+Day 1  ○  Day 2  ○  Day 3  ○  Day 4  ○  Day 5  ○
+Day 6  ○  Day 7  ○  Day 8  ○  Day 9  ○  Day 10 ○
+Day 11 ○  Day 12 ○  Day 13 ○  Day 14 ○
+
+━━━━━━━━━━━━━━━━━━━━
+PHASE 2 — DAYS 15–21
+Add Weight
+One more thing. Keep Phase 1 going.
+━━━━━━━━━━━━━━━━━━━━
+Habit 3: ${h3}
+
+Day 15 ○  Day 16 ○  Day 17 ○  Day 18 ○
+Day 19 ○  Day 20 ○  Day 21 ○
+
+━━━━━━━━━━━━━━━━━━━━
+PHASE 3 — DAYS 22–30
+Raise the Standard
+One final stretch. Keep everything going.
+━━━━━━━━━━━━━━━━━━━━
+Habit 4: ${h4}
+
+Day 22 ○  Day 23 ○  Day 24 ○  Day 25 ○  Day 26 ○
+Day 27 ○  Day 28 ○  Day 29 ○  Day 30 ○
+
+━━━━━━━━━━━━━━━━━━━━
+REMEMBER
+By day 30 you won't have a different life.
+You'll have proof that you are someone
+who does what she says.
+That identity is what everything
+else gets built on.
+━━━━━━━━━━━━━━━━━━━━
+Repeat next month. Add harder things.
+The growth compounds.`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('copy-confirm').textContent = '✓ Copied — open your notes app and paste';
+      setTimeout(() => document.getElementById('copy-confirm').textContent = '', 4000);
+    }).catch(() => {
+      document.getElementById('copy-confirm').textContent = 'Press and hold to copy the text above';
+    });
+  }
+</script>
+</body>
+</html>
