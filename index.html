@@ -530,55 +530,36 @@
     unlockTracker(false);
   }
 
-  async function handleSubmit() {
-    const emailEl = document.getElementById('email-input');
-    const errorEl = document.getElementById('gate-error');
-    const btn = document.getElementById('submit-btn');
-    const email = emailEl.value.trim();
+ async function handleSubmit() {
+  const emailEl = document.getElementById('email-input');
+  const errorEl = document.getElementById('gate-error');
+  const btn = document.getElementById('submit-btn');
+  const email = emailEl.value.trim();
 
-    errorEl.textContent = '';
+  errorEl.textContent = '';
 
-    if (!email || !email.includes('@') || !email.includes('.')) {
-      errorEl.textContent = 'Please enter a valid email address.';
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Unlocking...';
-
-    try {
-      const res = await fetch(`https://api.beehiiv.com/v2/publications/${BEEHIIV_PUB_ID}/subscriptions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${BEEHIIV_API_KEY}`
-        },
-        body: JSON.stringify({
-          email: email,
-          reactivate_existing: true,
-          send_welcome_email: true,
-          utm_source: 'youtube',
-          utm_medium: 'tracker_page',
-          utm_campaign: '30day_challenge'
-        })
-      });
-
-      if (res.ok || res.status === 201 || res.status === 200) {
-        localStorage.setItem('tsc_unlocked', 'true');
-        unlockTracker(true);
-      } else {
-        const data = await res.json();
-        errorEl.textContent = data.message || 'Something went wrong. Please try again.';
-        btn.disabled = false;
-        btn.textContent = 'Unlock the tracker →';
-      }
-    } catch (err) {
-      // If API call fails (e.g. CORS on some hosts), still unlock — don't punish the user
-      // You can remove this fallback if you want strict gate enforcement
-      localStorage.setItem('tsc_unlocked', 'true');
-      unlockTracker(true);
-    }
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    errorEl.textContent = 'Please enter a valid email address.';
+    return;
   }
+
+  btn.disabled = true;
+  btn.textContent = 'Unlocking...';
+
+  try {
+    await fetch('https://subscribe-forms.beehiiv.com/cd6af80d-3548-4b4d-b825-611af2bc6c3b', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    });
+  } catch (err) {
+    console.log('Submitted');
+  }
+
+  localStorage.setItem('tsc_unlocked', 'true');
+  unlockTracker(true);
+}
 
   function unlockTracker(animate) {
     document.getElementById('gate').style.display = 'none';
