@@ -66,11 +66,17 @@
 <div class="gate" id="gate">
   <div class="gate-icon">🔒</div>
   <div class="gate-title">Get free access to the full 30 day tracker</div>
-  <div class="gate-desc">Enter your email to unlock the interactive tracker and a <strong>copy-to-notes version</strong> you can save directly to your phone.</div>
-  <input class="email-input" type="email" id="email-input" placeholder="your@email.com" />
-  <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">Unlock the tracker →</button>
-  <div class="gate-error" id="gate-error"></div>
-  <div class="gate-privacy">No spam. Just content from The Simple Complex. Unsubscribe any time.</div>
+  <div class="gate-desc">Enter your email below to unlock the interactive tracker and a <strong>copy-to-notes version</strong> you can save directly to your phone.</div>
+  <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+  <iframe src="https://subscribe-forms.beehiiv.com/cd6af80d-3548-4b4d-b825-611af2bc6c3b"
+    class="beehiiv-embed"
+    data-test-id="beehiiv-embed"
+    frameborder="0"
+    scrolling="no"
+    style="width:100%; height:291px; margin:0 0 12px; background-color:transparent; box-shadow:0 0 #0000; max-width:100%;">
+  </iframe>
+  <button class="submit-btn" onclick="manualUnlock()">I signed up — unlock my tracker →</button>
+  <div class="gate-privacy" style="margin-top:10px;">No spam. Just content from The Simple Complex. Unsubscribe any time.</div>
 </div>
 
 <div class="tracker-content" id="tracker-content">
@@ -152,42 +158,9 @@
     unlockTracker(false);
   }
 
-  function handleSubmit() {
-    var emailEl = document.getElementById('email-input');
-    var errorEl = document.getElementById('gate-error');
-    var btn = document.getElementById('submit-btn');
-    var email = emailEl.value.trim();
-    errorEl.textContent = '';
-    if (!email || email.indexOf('@') === -1 || email.indexOf('.') === -1) {
-      errorEl.textContent = 'Please enter a valid email address.';
-      return;
-    }
-    btn.disabled = true;
-    btn.textContent = 'Unlocking...';
-    var iframe = document.createElement('iframe');
-    iframe.name = 'bh-frame';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://app.beehiiv.com/subscribe/pub_e8bf5bb7-1ba5-4690-92ba-7d38ce62367c';
-    form.target = 'bh-frame';
-    form.style.display = 'none';
-    var ef = document.createElement('input');
-    ef.type = 'email'; ef.name = 'email'; ef.value = email;
-    form.appendChild(ef);
-    var us = document.createElement('input');
-    us.type = 'hidden'; us.name = 'utm_source'; us.value = 'youtube';
-    form.appendChild(us);
-    var uc = document.createElement('input');
-    uc.type = 'hidden'; uc.name = 'utm_campaign'; uc.value = '30day_tracker';
-    form.appendChild(uc);
-    document.body.appendChild(form);
-    form.submit();
-    setTimeout(function() {
-      localStorage.setItem('tsc_unlocked', 'true');
-      unlockTracker(true);
-    }, 800);
+  function manualUnlock() {
+    localStorage.setItem('tsc_unlocked', 'true');
+    unlockTracker(true);
   }
 
   function unlockTracker(animate) {
